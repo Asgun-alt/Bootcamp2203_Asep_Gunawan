@@ -1,0 +1,2 @@
+Connect to github
+reconnect after changing SSH
