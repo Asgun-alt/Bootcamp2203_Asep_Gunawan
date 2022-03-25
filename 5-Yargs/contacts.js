@@ -38,9 +38,11 @@ const saveContact = (name, email, mobile) => {
     }
 
     // validate email format, also check if there is duplicate email 
-    if (email != "" && !validator.isEmail(email)) {
-        console.log('Invalid email.');
-        return false;
+    if (email) {
+        if (!validator.isEmail(email)) {
+            console.log('Invalid email.');
+            return false;
+        }
     }
 
     // validate mobile phone format, also check if there is duplicate mobile phone 
@@ -53,7 +55,7 @@ const saveContact = (name, email, mobile) => {
     contacts.push(contact);
     fs.writeFileSync('data/contacts.json', JSON.stringify(contacts));
     console.log('Data is saved');
-    rl.close();
+
 }
 
 module.exports = { saveContact }

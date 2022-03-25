@@ -99,7 +99,7 @@ yargs.command({
         const contact = {
             name: argv.name,
             email: argv.email,
-            mobile: argv.mobile
+            mobile: argv.mobile,
         };
         console.log(contact);
         //save input to json file
