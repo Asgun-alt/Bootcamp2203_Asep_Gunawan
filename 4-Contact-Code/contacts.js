@@ -31,5 +31,5 @@ const saveContact = (name, email, mobile) => {
     rl.close();
 }
 
-module.exports.questions = questions
-module.exports.saveContact = saveContact
+module.exports = { questions, saveContact }
+// module.exports.saveContact = saveContact
