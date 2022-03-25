@@ -6,10 +6,10 @@ const rl = readline.createInterface({
     output: process.stdout
 });
 
-// const dirPath = './data';
-// if (!fs.existsSync('dirPath')) {
-//     fs.mkdirSync(dirPath);
-// }
+const dirPath = './data';
+if (!fs.existsSync('dirPath')) {
+    fs.mkdirSync(dirPath);
+}
 const dataPath = './data/contacts.json';
 if (!fs.existsSync(dataPath)) {
     fs.writeFileSync(dataPath, '[]', 'utf-8')
