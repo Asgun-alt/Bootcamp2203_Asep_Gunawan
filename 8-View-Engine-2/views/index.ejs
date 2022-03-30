@@ -24,12 +24,27 @@
     </h2>
 
     <ul class="contact-list">
+        <!-- loop through array and show it to the list -->
         <% contact.forEach((contact)=> { %>
             <li> nama: <%= contact.name%>
             </li>
             <li> email: <%= contact.email%>
             </li>
             <% }); %>
+    </ul>
+
+    <!-- Get data from array using For loop-->
+    <ul class="contact-list">
+        <!-- loop through array and show it to the list -->
+        <% for (var i=0; i < contact.length; i++){ %>
+            <li>
+                Nama : <%= contact[i].name %>
+            </li>
+            <li>
+                Email : <%= contact[i].email %>
+            </li>
+            <% } %>
+
     </ul>
 
 </body>
