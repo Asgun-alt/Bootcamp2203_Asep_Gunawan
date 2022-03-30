@@ -4,15 +4,31 @@ const path = require('path');
 const port = 3000
 
 // function to show author's name to ejs file
-const author = () => {
-    name: "Asep gunawan"
+const author = {
+    name: "Asep gunawan",
+    title: "Webserver EJS"
 }
 
 // Information using EJS
 app.set('view engine', 'ejs')
 
 app.get('/', (req, res) => {
-    res.render('index', { name: "Asep Gunawan" });
+
+    contact = [
+        {
+            name: "Asep Gunawan",
+            email: "asgun@gmail.com"
+        },
+        {
+            name: "Albert",
+            email: "albert@gmail.com"
+        },
+        {
+            name: "Boby",
+            email: "Boby@gmail.com"
+        }
+    ]
+    res.render('index', { author, contact });
 })
 
 app.get('/about', (req, res) => {

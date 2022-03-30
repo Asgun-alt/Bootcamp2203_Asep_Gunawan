@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        <%= author.title %>
+    </title>
+</head>
+
+<body>
+    <h1 class="header">Hello World</h1>
+
+    <ul>
+        <li class="index" href="/">home</li>
+        <li class="about" href="/about.ejs">about</li>
+        <li class="contact" href="/contact.ejs">contact</li>
+    </ul>
+
+    <h2>Web server Node JS</h2>
+    <h2>Welcome <%= author.name %>
+    </h2>
+
+    <ul class="contact-list">
+        <% contact.forEach((contact)=> { %>
+            <li> nama: <%= contact.name%>
+            </li>
+            <li> email: <%= contact.email%>
+            </li>
+            <% }); %>
+    </ul>
+
+</body>
+<script src="../app.js"></script>
+
+</html>
