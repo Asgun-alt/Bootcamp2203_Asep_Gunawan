@@ -16,28 +16,34 @@ app.set('view engine', 'ejs')
 app.use(expressLayouts);
 app.set('layout', './layout/main_layouts')
 
-// app.get('/', function (req, res) {
-//     res.locals = {
-//         title: 'Example',
-//         message: 'This is a message'
-//     };
-//     res.render('index', {
-//         // additional locals, a custom layout, or other options can be defined here
-//     });
-// });
-
 app.get('/', (req, res) => {
-    res.locals.title_page = "index"
+
+    contact = [
+        {
+            name: "Asep Gunawan",
+            email: "asgun@gmail.com"
+        },
+        {
+            name: "Albert",
+            email: "albert@gmail.com"
+        },
+        {
+            name: "Boby",
+            email: "Boby@gmail.com"
+        }
+    ]
+
+    res.locals.title_page = "Home"
     res.render('index');
 })
 
 app.get('/about', (req, res) => {
-    res.locals.title_page = "about"
+    res.locals.title_page = "About"
     res.render('about');
 })
 
 app.get('/contact', (req, res) => {
-    res.locals.title_page = "contact"
+    res.locals.title_page = "Contact"
     res.render('contact');
 })
 
