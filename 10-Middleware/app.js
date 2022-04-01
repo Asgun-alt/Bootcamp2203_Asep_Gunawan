@@ -12,11 +12,13 @@ const author = {
 
 // Information using EJS
 app.set('view engine', 'ejs')
+//serve static file 
 app.use(express.static('public'))
 
 app.use(expressLayouts);
 app.set('layout', './layout/main_layouts')
 
+// show live time in terminal
 app.use((res, req, next) => {
     console.log('Time: ', Date.now())
     next()
