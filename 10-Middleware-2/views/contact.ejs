@@ -1,0 +1,15 @@
+<div class="display-3 text-center text-uppercase"> Welcome to <%= title_page %> page </div>
+<div class="display-5"> Contact List</div>
+<ul class="list-group list-group-flush">
+    <% if(contact.length < 1){ %>
+        <p>empty</p>
+        <% } else { %>
+            <!-- loop through array and show it to the list -->
+            <% contact.forEach((contact)=> { %>
+                <li class="list-group-item">
+                    Name: <%= contact.name %> <br>
+                        Email: <%= contact.email %>
+                </li>
+                <% }); %>
+                    <% } %>
+</ul>

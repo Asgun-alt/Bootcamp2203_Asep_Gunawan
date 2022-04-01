@@ -1,0 +1,21 @@
+img {
+    /* set image width */
+    width: 200px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+
+    /* add border to image */
+    border-style: solid;
+    border-width: thin;
+    border-spacing: 20px;
+    border-radius: 20%;
+    padding: 5px;
+}
+
+.thumbnail:hover {
+    width: 250px;
+}
+
+.nav {
+    margin-bottom: 20px;
+}

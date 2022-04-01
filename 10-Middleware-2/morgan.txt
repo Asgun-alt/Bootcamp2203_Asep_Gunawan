@@ -1,0 +1,40 @@
+Time:  1648786011549 
+digunakan untuk mengambil waktu saat ini, return dalam milisecond
+
+Morgan adalah logger HTTP request middleware untuk nodejs yang biasa digunakan dalam aplikasi express
+
+:method
+GET adalah method untuk mengembalikan request http
+
+:url
+/.. adalah url dari request
+
+:status
+adalah output ringkas berwarna sesuai dengan status untuk penggunaan pengembangan
+status token berwarna hijau artinya kode sukses
+status token berwarna merah artinya kode server error
+status token berwarna kuning artinya kode client error
+status token berwarna cyan artinya kode pengalihan
+sementara status tidak berwarna untuk kode informasi
+
+:response-time ms -
+adalah waktu permintaan masuk ke morgan dan saat response header ditulis dalam milisecond
+argumen digit adalah angka yang menentukan digit yang akan dimasukkan kedalam angka secara default jumlahnya 3 yang memberikan presisi microsecond
+
+:res[content-length]
+response untuk menampilkan panjang konten
+
+
+Time:  1648786013098
+GET /about 304 10.220 ms - -
+GET /css/style.css 304 3.648 ms - -
+GET /img/image-1.jpeg 304 2.929 ms - -
+Time:  1648786014044
+GET /contact 304 10.003 ms - -
+GET /css/style.css 304 4.451 ms - -
+
+mengembalikan http request di url /(index) dengan status kode 304 berwarna cyan yang mengindikasikan halaman web yang di request tidak berubah sejak terakhir kali di akses, waktu permintaan yang diterima adalah 37.127 milisecond. dash (-) mengartikan kalau ada panjang konten yang hilang
+
+Time:  1648794708667
+GET /login 404 4.764 ms - 25
+kode 404 menandakan kalau halaman web yang kita akses tidak dapat ditemukan, sementara angka 25 adalah jumlah konten yang terdapat didalam halaman web
