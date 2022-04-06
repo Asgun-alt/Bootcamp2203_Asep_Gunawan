@@ -33,3 +33,7 @@ img {
 .nav {
     margin-bottom: 15%;
 }
+
+.alert-message {
+    text-align: center;
+}

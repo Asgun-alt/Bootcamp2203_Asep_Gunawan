@@ -2,13 +2,35 @@ const express = require('express')
 const expressLayouts = require('express-ejs-layouts')
 const app = express()
 const port = 3000
-const { loadContact, detailContact, addContact, checkDuplicate } = require('./functions.js')
+const { loadContact, deleteContact, detailContact, addContact, checkDuplicate } = require('./functions.js')
 
 // initialize express validator
 const { body, check, validationResult } = require('express-validator')
 
 // initialize flash message session
+var flash = require('express-flash')
+var session = require('express-session')
+var cookieParser = require('cookie-parser')
+var sessionStore = new session.MemoryStore;
 
+
+// configure flash message
+app.use(cookieParser('secret'))
+app.use(session({
+    cookie: { maxAge: 60000 },
+    store: sessionStore,
+    saveUninitialized: true,
+    resave: 'true',
+    saveUninitialized: 'true'
+}))
+app.use(flash())
+
+// custom flash middleware
+app.use((req, res, next) => {
+    res.locals.sessionFlash = req.sessionFlash
+    delete req.session.sessionFlash
+    next()
+})
 
 // Information using EJS
 app.set('view engine', 'ejs')
@@ -21,12 +43,12 @@ app.set('layout', './layout/main_layouts')
 
 app.get('/', (req, res) => {
 
-    res.locals.title_page = "Home"
     const contacts = loadContact()
+
     res.render('index', {
         title: 'home page',
         contacts,
-
+        message: req.flash('message')
     });
 })
 
@@ -38,6 +60,24 @@ app.get('/detail-contact/:name', (req, res) => {
         contacts
     });
 })
+
+// delete contact
+// app.get('/:name', (req, res) => {
+//     const delete_contact = deleteContact(req.params.name)
+
+//     if (delete_contact) {
+//         req.flash('delete_message', 'fail to deleted data')
+//         res.redirect('/')
+//     } else {
+//         req.flash('delete_message', 'data has been deleted')
+//         res.redirect('/')
+//     }
+
+//     res.render('/', {
+//         title: 'home',
+//         delete_contact
+//     });
+// })
 
 // add contact page
 app.get('/add-contact', (req, res) => {
@@ -67,10 +107,10 @@ app.post('/', [
             errors: errors.array()
         })
     } else {
-        addContact(req.body)
-        res.redirect('/')
+        req.flash('message', 'new data has been added')
     }
-
+    addContact(req.body)
+    res.redirect('/')
 })
 
 // render about page

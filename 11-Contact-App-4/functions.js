@@ -54,14 +54,12 @@ const checkDuplicate = (name) => {
 
 const deleteContact = (name) => {
     const contacts = loadContact()
-    contactName = { name }
-    const deleteInformation = contacts.filter((contactName) => contactName.name.toLowerCase() !== name.toLowerCase())
+    const deleteInformation = contacts.filter((contactName) => contactName.name !== name)
     if (contacts.length === deleteInformation.length) {
         console.log('Data is not found');
         return false
-    } $
-    fs.writeFileSync('data/contacts.json', JSON.stringify(deleteInformation));
-    console.log(`${name} Data has been deleted`)
+    }
+    fs.writeFileSync('data/contacts.json', JSON.stringify(deleteInformation))
 }
 
 module.exports = { addContact, checkDuplicate, listContact, detailContact, deleteContact, loadContact }

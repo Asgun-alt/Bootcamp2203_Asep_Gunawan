@@ -2,7 +2,7 @@
     form <%= title %>
 </div>
 
-<div class="container-sm">
+<div class="container-sm col-md-5">
 
     <% if (typeof errors !='undefined' ) { %>
         <div class="alert alert-danger" role="alert">
@@ -12,7 +12,7 @@
                         <%= error.msg %>
                     </li>
                     <% }) %>
-            </ul>
+            </ul>git 
         </div>
         <% } %>
 
@@ -29,8 +29,7 @@
 
                 <div class="mb-3">
                     <label for="phoneNumber" class="form-label">Phone number</label>
-                    <input type="text" class="form-control" id="phoneNumber" phoneNumber="phoneNumber"
-                        name="phoneNumber" required>
+                    <input type="text" class="form-control" id="phoneNumber" name="phoneNumber" required>
                 </div>
 
                 <button type="submit" class="btn btn-primary">Submit</button>

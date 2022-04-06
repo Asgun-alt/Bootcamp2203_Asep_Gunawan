@@ -1,6 +1,17 @@
 <div class="container-fluid">
     <div class="display-5">List Contact</div>
-    <a href="/add-contact/"><button type="button" class="btn btn-outline-info">Add Contact</button></a>
+    <% if ( message.length !==0) { %>
+        <div class="container-sm col-md-5">
+            <div class="alert alert-success" role="alert">
+                <div class="alert-message">
+                    <%= message %>
+                </div>
+            </div>
+        </div>
+        <% } %>
+
+            <a href=" /add-contact/"><button type="button" class="btn btn-outline-info">Add Contact</button></a>
+
 </div>
 
 <div class="table-container table-responsive">
@@ -30,7 +41,10 @@
                                 <%= contact.email %>
                             </td>
                             <td><a href="/detail-contact/<%= contact.name%>"><button type="button"
-                                        class="btn btn-outline-info">Detail</button></a></td>
+                                        class="btn btn-outline-info">Detail</button></a>
+                                <a href="/<%= contact.name%>"><button type="button"
+                                        class="btn btn-outline-danger">Delete</button></a>
+                            </td>
             </tr>
             <% }); %>
                 <% } %>
