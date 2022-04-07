@@ -2,7 +2,7 @@ const express = require('express')
 const expressLayouts = require('express-ejs-layouts')
 const app = express()
 const port = 3000
-const { loadContact, deleteContact, detailContact, addContact, updateContacts, checkDuplicate } = require('./functions.js')
+const { loadContact, deleteContact, detailContact, addContact, checkDuplicate } = require('./functions.js')
 
 // initialize express validator
 const { body, check, validationResult } = require('express-validator')
