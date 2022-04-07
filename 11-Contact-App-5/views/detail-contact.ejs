@@ -19,6 +19,8 @@
                     <%= contacts.email %>
                 </p>
                 <a href="/contact" class="card-link"><button type="button" class="btn btn-secondary">Back</button></a>
+                <a href="/contact/edit/<%= contacts.name %> " class="card-link"><button type="button"
+                        class="btn btn-primary">Edit</button></a>
                 <a href="/contact/delete/<%= contacts.name %> " class="card-link"
                     onclick="return confirm('delete?');"><button type="button"
                         class="btn btn-danger">Delete</button></a>

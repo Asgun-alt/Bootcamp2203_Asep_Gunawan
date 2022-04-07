@@ -2,7 +2,7 @@ const express = require('express')
 const expressLayouts = require('express-ejs-layouts')
 const app = express()
 const port = 3000
-const { loadContact, deleteContact, detailContact, addContact, checkDuplicate } = require('./functions.js')
+const { loadContact, deleteContact, detailContact, addContact, checkDuplicate, updateContacts } = require('./functions.js')
 
 // initialize express validator
 const { body, check, validationResult } = require('express-validator')
@@ -79,6 +79,65 @@ app.get('/contact/delete/:name', (req, res) => {
         res.redirect('/contact')
     }
 })
+
+// checkbox delete process
+app.post('/contact/checkDelete', (req, res) => {
+    var { checkboxDelete } = req.body
+    console.log(checkboxDelete)
+    console.log(checkboxDelete.length)
+
+    if (Array.isArray(checkboxDelete)) {
+        checkboxDelete.forEach(checkboxContact => {
+            deleteContact(checkboxContact)
+            req.flash('delete_message', 'data has been deleted')
+            res.redirect('/contact')
+        })
+    } else {
+        deleteContact(checkboxContact)
+        req.flash('delete_message', 'data has been deleted')
+        res.redirect('/contact')
+    }
+
+})
+
+// edit contact
+app.get('/contact/edit/:name', (req, res) => {
+    const contact = detailContact(req.params.name)
+
+    res.render('edit-contact', {
+        title: 'form edit contact',
+        contact
+    });
+})
+
+// process update data contact 
+app.post('/contact/update', [
+    body('name').custom((value, { req }) => {
+        const duplicate = checkDuplicate(value)
+        if (value !== req.body.oldName && duplicate) {
+            throw new Error('name is already used!')
+        } else {
+            return true
+        }
+    }),
+    check('email', 'email format is not valid!').isEmail(),
+    check('phoneNumber', 'phone number format is not valid!').isMobilePhone(),
+], (req, res) => {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+        // return res.status(400).json({ errors: errors.array() });
+        res.render('edit-contact', {
+            title: 'edit contact',
+            errors: errors.array(),
+            contact: req.body
+        })
+    } else {
+        req.flash('message', 'new data has been updated')
+        updateContacts(req.body)
+        res.redirect('/contact')
+    }
+})
+
 
 // detail contact page
 app.get('/contact/detail-contact/:name', (req, res) => {

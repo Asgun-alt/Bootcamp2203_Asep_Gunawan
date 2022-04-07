@@ -58,4 +58,17 @@ const deleteContact = (name) => {
 
     saveContact(deleteInformation)
 }
-module.exports = { addContact, checkDuplicate, listContact, detailContact, deleteContact, loadContact }
+
+const updateContacts = (newContact) => {
+    const contacts = loadContact()
+
+    // remove old contact which name is similar to oldname
+    const filteredInformation = contacts.filter((contact) => contact.name !== newContact.oldName);
+
+    delete newContact.oldName
+    filteredInformation.push(newContact)
+    saveContact(filteredInformation)
+
+}
+
+module.exports = { addContact, updateContacts, checkDuplicate, listContact, detailContact, deleteContact, loadContact }
