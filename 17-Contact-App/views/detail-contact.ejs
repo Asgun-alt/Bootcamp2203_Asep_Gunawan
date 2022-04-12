@@ -1,0 +1,29 @@
+<% if (!contactDetail) { %>
+    <div class="container-lg mt-5">
+        <div class="alert alert-danger" role="alert">
+            Contact is not available
+        </div>
+    </div>
+
+    <% } else {%>
+        <div class="card" style="width: 18rem; margin: 3rem">
+            <div class="card-body">
+                <h5 class="card-title">Detail Contact</h5>
+                <p class="card-text">Nama :
+                    <%= contactDetail.name %>
+                </p>
+                <p class="card-text">No HP:
+                    <%= contactDetail.mobile %>
+                </p>
+                <p class="card-text">email :
+                    <%= contactDetail.email %>
+                </p>
+                <a href="/contact" class="card-link"><button type="button" class="btn btn-secondary">Back</button></a>
+                <a href="/contact/edit/<%= contactDetail.name %> " class="card-link"><button type="button"
+                        class="btn btn-primary">Edit</button></a>
+                <!-- <a href="/contact/delete/<%= contactDetail.name %> " class="card-link"
+                    onclick="return confirm('delete?');"><button type="button"
+                        class="btn btn-danger">Delete</button></a> -->
+            </div>
+        </div>
+        <% } %>
