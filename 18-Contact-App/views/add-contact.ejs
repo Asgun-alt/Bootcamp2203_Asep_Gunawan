@@ -1,0 +1,37 @@
+<div class="display-3 text-center text-uppercase">
+    form <%= title %>
+</div>
+
+<div class="container-sm col-md-5">
+
+    <% if (typeof errors !='undefined' ) { %>
+        <div class="alert alert-danger" role="alert">
+            <ul>
+                <% errors.forEach(error=> { %>
+                    <li>
+                        <%= error.msg %>
+                    </li>
+                    <% }) %>
+            </ul>
+        </div>
+        <% } %>
+
+            <form method="post" action="/contact/addcontact">
+                <div class="mb-3">
+                    <label for="name" class="form-label">Full name</label>
+                    <input type="text" class="form-control" id="name" name="name" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email address</label>
+                    <input type="email" class="form-control" id="email" name="email">
+                </div>
+
+                <div class="mb-3">
+                    <label for="mobile" class="form-label">Phone number</label>
+                    <input type="text" class="form-control" id="mobile" name="mobile" required>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+</div>

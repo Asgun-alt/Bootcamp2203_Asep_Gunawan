@@ -1,0 +1,76 @@
+<div class="container-fluid">
+    <div class="display-5">List Contact</div>
+    <% if ( message.length !==0) { %>
+        <div class="container-sm col-md-5">
+            <div class="alert alert-success" role="alert">
+                <div class="alert-message">
+                    <%= message %>
+                </div>
+            </div>
+        </div>
+        <% } %>
+            <% if ( delete_message.length !==0) { %>
+                <div class="container-sm col-md-5">
+                    <div class="alert alert-danger" role="alert">
+                        <div class="alert-message">
+                            <%= delete_message %>
+                        </div>
+                    </div>
+                </div>
+                <% } %>
+
+                    <a href="/contact/add-contact/"><button type="button" class="btn btn-outline-info">Add
+                            Contact</button></a>
+</div>
+
+<div class="table-container table-responsive">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Nama</th>
+                <th scope="col">Email</th>
+                <th scope="col">Action</th>
+                <th scope="col">Checkbox</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <% if( contacts.length < 1){ %>
+                    <p>empty</p>
+                    <% } else { %>
+
+                        <!-- checkbox delete form -->
+                        <form action="/contact/checkDelete" method="post">
+
+                            <!-- loop through array and show it to the list -->
+                            <% contacts.forEach(( contact, index)=> { index++ %>
+                                <th scope="row">
+                                    <%= index %>
+                                </th>
+                                <td>
+                                    <%= contact.name %>
+                                </td>
+                                <td>
+                                    <%= contact.email %>
+                                </td>
+                                <td><a href="/contact/detail-contact/<%= contact.name%>"><button type="button"
+                                            class="btn btn-outline-primary">Detail</button></a>
+                                    <a href="/contact/edit/<%= contact.name %> " class="card-link"><button type="button"
+                                            class="btn btn-warning">Edit</button></a>
+                                    <a href="/contact/delete/<%= contact.name%>"><button type="button"
+                                            class="btn btn-outline-danger">Delete</button></a>
+                                </td>
+                                <td>
+                                    <input type="checkbox" name="checkboxDelete" value="<%= contact.name%>">
+                                </td>
+            </tr>
+            <% }); %>
+                <% } %>
+        </tbody>
+    </table>
+
+    <button type="submit" class="btn btn-danger">Delete</button>
+    </form>
+
+</div>
