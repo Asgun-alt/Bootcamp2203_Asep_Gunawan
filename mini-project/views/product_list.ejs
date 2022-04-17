@@ -1,0 +1,36 @@
+<div class="body-container">
+    <div class="pt-3 pb-3">
+
+        <div class="container">
+            <div class="row">
+                <% if (products.length < 1) { %>
+                    <p>product is empty</p>
+                    <% } else {%>
+
+                        <!-- loop through array and show it to the list -->
+                        <% products.forEach(product=> { %>
+
+                            <div class="card" style="width: 20rem;">
+                                <img src="../<%= product.product_image %>" class="card-img-top" alt="product-image">
+                                <div class="card-body">
+                                    <h5 class="card-title">
+                                        <%= product.product_name %>
+                                    </h5>
+                                    <p class="card-text">
+                                        IDR : <%= product.price %>
+                                    </p>
+                                    <div class="card-button">
+                                        <a href="/product/detail_product/<%= product.product_id %>"
+                                            class="btn btn-primary">detail</a>
+                                        <a href="/selling_list/<%= product.product_id %>"
+                                            class="btn btn-danger">Sell</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <% }) %>
+                                <% } %>
+            </div>
+        </div>
+
+    </div>
+</div>

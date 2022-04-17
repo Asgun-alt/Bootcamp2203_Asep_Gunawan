@@ -1,0 +1,64 @@
+<div class="body-container">
+    <div class="pt-3 pb-3">
+
+        <div class="container-fluid">
+            <% if (typeof errors !='undefined' ) { %>
+                <div class="alert alert-danger" role="alert">
+                    <ul>
+                        <% errors.forEach(error=> { %>
+                            <li>
+                                <%= error.message %>
+                            </li>
+                            <% }) %>
+                    </ul>
+                </div>
+                <% } %>
+        </div>
+
+        <div class="container-sm col-md-5 form-container">
+            <form method="post" action="/update/user" enctype="multipart/form-data">
+                <!-- User name -->
+                <div class="row">
+                    <div class="col mb-3">
+                        <label for="price" class="form-label">Full name : </label>
+                        <input type="text" id="fullname" name="fullname" class="form-control" placeholder="Full name"
+                            value="<%= user_detail.fullname %>">
+                    </div>
+                    <div class="col mb-3">
+                        <label for="price" class="form-label">User name : </label>
+                        <input type="text" id="username" name="username" class="form-control" placeholder="User name"
+                            value="<%= user_detail.username %>">
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="price" class="form-label">Email : </label>
+                    <input type="email" id="email" name="email" class="form-control" placeholder="Email"
+                        value="<%= user_detail.email %>">
+                </div>
+
+                <div class="mb-3">
+                    <label for="price" class="form-label">Password : </label>
+                    <input type="password" id="password" name="password" class="form-control" placeholder="Password"
+                        value="<%= user_detail.password %>">
+                </div>
+
+                <div class="mb-3">
+                    <label for="price" class="form-label">Role : </label>
+                    <input type="text" id="role" name="role" class="form-control" value="<%= user_detail.role %>">
+                </div>
+
+                <p class="font-monospace">User Image :</p>
+                <small class="text-muted">profile picture required.</small>
+                <div class="input-group mb-4">
+                    <input type="file" id="new_user_image" name="new_user_image" class="form-control"
+                        aria-describedby="inputGroupFileAddon04" aria-label="Upload">
+                    <input type="hidden" id="old_user_image" name="old_user_image" value="<%=user_detail.user_image %>">
+                </div>
+
+                <button type="submit" value="register" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+
+    </div>
+</div>

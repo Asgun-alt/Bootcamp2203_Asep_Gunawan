@@ -1,0 +1,37 @@
+<div class="display-3 text-center text-uppercase mb-5">
+    <%= title %>
+</div>
+
+<form method="post" action="/product/update_product">
+    <div class="container-sm col-md-5 form-container">
+        <form method="post" action="/product/addproduct" enctype="multipart/form-data">
+            <input type="hidden" name="product_id" id="product_id" value="<%= product_detail.product_id %>">
+            <div class="mb-3">
+                <label for="product_name" class="form-label">Product Name :</label>
+                <input type="text" class="form-control" id="product_name" name="product_name" required
+                    value="<%= product_detail.product_name %>">
+            </div>
+
+            <div class="mb-3">
+                <label for="price" class="form-label">Price : </label>
+                <input type="text" class="form-control" id="price" name="price" value="<%= product_detail.price %>">
+            </div>
+
+            <div class="form-floating mb-4">
+                <textarea class="form-control" placeholder="Leave a comment here" id="description" name="description"
+                    style="height: 100px"><%= product_detail.description %></textarea>
+                <label for="floatingTextarea2">Description</label>
+            </div>
+
+            <p class="font-monospace">Product Image :</p>
+            <div class="input-group mb-5">
+                <input type="file" class="form-control" id="new_product_image" name="new_product_image"
+                    aria-describedby="inputGroupFileAddon04" aria-label="Upload">
+
+                <input type="hidden" id="old_product_image" name="old_product_image"
+                    value="<%= product_detail.product_image %>">
+            </div>
+
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>

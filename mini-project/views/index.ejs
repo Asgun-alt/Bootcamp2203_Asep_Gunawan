@@ -1,0 +1,80 @@
+<div class="body-container">
+    <div class="pt-5">
+        <div class="container-fluid">
+            <div class="display-3 text-center text-uppercase">
+                <% if ( success_message.length !==0) { %>
+                    <div class="container-sm col-md-5">
+                        <div class="alert alert-success" role="alert">
+                            <div class="alert-message">
+                                <%= success_message %>
+                            </div>
+                        </div>
+                    </div>
+                    <% } %>
+                        <% if ( fail_message.length !==0) { %>
+                            <div class="container-sm col-md-5">
+                                <div class="alert alert-danger" role="alert">
+                                    <div class="alert-message">
+                                        <%= fail_message %>
+                                    </div>
+                                </div>
+                            </div>
+                            <% } %>
+            </div>
+        </div>
+
+        <div class="table-container table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Product Name</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">description</th>
+                        <th scope="col">Image</th>
+                        <th scope="col">action</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <a href="/add_product"><button type="button" class="btn add btn-outline-primary">Add
+                            Product</button></a>
+
+                    <% if (products.length < 1) { %>
+                        <p>product is empty</p>
+                        <% } else {%>
+                            <% products.forEach((product, index)=> { index++ %>
+
+                                <tr>
+                                    <th scope="row">
+                                        <%= index %>
+                                    </th>
+                                    <td>
+                                        <%= product.product_name %>
+                                    </td>
+                                    <td>
+                                        <%= product.price %>
+                                    </td>
+                                    <td>
+                                        <%= product.description %>
+                                    </td>
+                                    <td>
+                                        <img src="../<%= product.product_image %>"
+                                            class="rounded-circle table-product-image" alt="product-image">
+                                    </td>
+                                    <td>
+                                        <a href="/product/update_product/<%= product.product_id %>"><button
+                                                type="button" class="btn btn-warning mb-1">Update</button></a>
+                                        <a href="/product/delete_product/<%= product.product_id %>"><button
+                                                type="button" class="btn btn-danger">Delete</button></a>
+                                    </td>
+                                </tr>
+                </tbody>
+                <% }) %>
+                    <% } %>
+            </table>
+        </div>
+
+
+    </div>
+</div>

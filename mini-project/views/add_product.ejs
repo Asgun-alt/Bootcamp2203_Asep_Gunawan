@@ -1,0 +1,31 @@
+<div class="display-3 text-center text-uppercase mb-5">
+    <%= title %>
+</div>
+
+<div class="container-sm col-md-5 form-container">
+    <form method="post" action="/product/addproduct" enctype="multipart/form-data">
+        <div class="mb-3">
+            <label for="productName" class="form-label">Product Name :</label>
+            <input type="text" class="form-control" id="productName" name="productName" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="price" class="form-label">Price : </label>
+            <input type="text" class="form-control" id="price" name="price">
+        </div>
+
+        <div class="form-floating mb-4">
+            <textarea class="form-control" placeholder="Leave a comment here" id="description" name="description"
+                style="height: 100px"></textarea>
+            <label for="floatingTextarea2">Description</label>
+        </div>
+
+        <p class="font-monospace">Product Image :</p>
+        <div class="input-group mb-5">
+            <input type="file" class="form-control" id="product_image" name="product_image"
+                aria-describedby="inputGroupFileAddon04" aria-label="Upload">
+        </div>
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>

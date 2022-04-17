@@ -1,0 +1,43 @@
+<div class="body-container">
+    <div class="pt-4">
+
+        <section class="vh-100">
+            <div class="container-fluid h-custom">
+                <div class="row d-flex justify-content-center align-items-center h-100">
+
+                    <div class="col-md-9 col-lg-6 col-xl-5">
+                        <img src="/<%= product_detail.product_image %>" class="img-fluid" alt="Product image">
+                    </div>
+
+                    <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
+
+                        <!-- Product Name -->
+                        <div class="form-outline mb-4">
+                            <h1>
+                                <%= product_detail.product_name %>
+                            </h1>
+                        </div>
+
+                        <!-- Description -->
+                        <div class="form-outline mb-3">
+                            <p class="lead">
+                                <%= product_detail.description %>
+                            </p>
+                        </div>
+
+                        <div class="d-flex justify-content-between align-items-center">
+                            <!-- Checkbox -->
+                            <div class="mb-0">
+                                <h1 class="display-6">Price : <%= product_detail.price %>
+                                </h1>
+                            </div>
+                            <a href="/selling_list/<%= product_detail.product_id %>" class="btn btn-danger">buy</a>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+</div>

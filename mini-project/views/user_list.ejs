@@ -1,0 +1,57 @@
+<div class="pt-3 pb-3">
+
+    <div class="container">
+        <% if (getUsers.length < 1) { %>
+            <p>product is empty</p>
+            <% } else {%>
+
+                <!-- loop through array and show it to the list -->
+                <% getUsers.forEach((getUser, index)=> { index++ %>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Fullname</th>
+                                <th scope="col">Username</th>
+                                <th scope="col">Email</th>
+                                <th scope="col">Role</th>
+                                <th scope="col">Image</th>
+                                <th scope="col">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th scope="row">
+                                    <%= index %>
+                                </th>
+                                <td>
+                                    <%= getUser.fullname %>
+                                </td>
+                                <td>
+                                    <%= getUser.username %>
+                                </td>
+                                <td>
+                                    <%= getUser.email %>
+                                </td>
+                                <td>
+                                    <%= getUser.role %>
+                                </td>
+                                <td>
+                                    <img src="../<%= getUser.user_image %>" class="rounded-circle table-product-image"
+                                        alt="product-image">
+                                </td>
+                                <td>
+                                    <a href="/user/update_user/<%= getUser.user_id %> "><button type="button"
+                                            class="btn btn-warning">Update</button></a>
+                                    <a href="/user/delete_user/<%= getUser.user_id %> "><button type="button"
+                                            class="btn btn-danger">Delete</button></a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <% }) %>
+                        <% } %>
+    </div>
+
+</div>
