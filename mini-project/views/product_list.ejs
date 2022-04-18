@@ -19,12 +19,14 @@
                                     <p class="card-text">
                                         IDR : <%= product.price %>
                                     </p>
-                                    <div class="card-button">
-                                        <a href="/product/detail_product/<%= product.product_id %>"
-                                            class="btn btn-primary">detail</a>
-                                        <a href="/selling_list/<%= product.product_id %>"
-                                            class="btn btn-danger">Sell</a>
-                                    </div>
+                                </div>
+                                <div class="card-button">
+                                    <a href="/product/detail_product/<%= product.product_id %>"
+                                        class="btn btn-outline-primary">detail</a>
+                                    <a href="/selling_list/<%= product.product_id %>"
+                                        class="btn btn-outline-danger">Sell</a>
+                                    <a href="/selling_list/<%= product.product_id %>"
+                                        class="btn btn-outline-warning">Nonmember Sell</a>
                                 </div>
                             </div>
                             <% }) %>

@@ -39,6 +39,7 @@ const fileImageStorage = multer.diskStorage({
     }
 })
 const upload = multer({ storage: fileImageStorage })
+
 // determines where the user image is stored
 const fileUserImageStorage = multer.diskStorage({
     destination: (req, file, callback) => {
@@ -64,7 +65,7 @@ app.use(expressLayouts);
 // configure flash message
 app.use(cookieParser('secret'))
 app.use(session({
-    cookie: { maxAge: 60000 },
+    cookie: { maxAge: 1000000 },
     store: sessionStore,
     saveUninitialized: true,
     resave: 'false',
@@ -110,7 +111,7 @@ app.get("/logout/user", (req, res) => {
 
 
 // render register page
-app.get('/register', checkAuthenticated, (req, res) => {
+app.get('/register', checkNotAuthenticated,  (req, res) => {
 
     res.render('register', {
         layout: './layouts/main_layouts',
@@ -118,7 +119,7 @@ app.get('/register', checkAuthenticated, (req, res) => {
 })
 
 // register new user process
-app.post('/register/new_user', upload_user_image.single('user_image'), async (req, res) => {
+app.post('/register/new_user', checkNotAuthenticated, upload_user_image.single('user_image'), async (req, res) => {
     try {
         const { fullname, username, email, password, confirm_password, role } = req.body
         const user_image = req.file.path.replace(/\\/g, '/')
@@ -187,7 +188,7 @@ app.post('/register/new_user', upload_user_image.single('user_image'), async (re
 })
 
 // render user list page
-app.get('/user_list', async (req, res) => {
+app.get('/user_list', checkNotAuthenticated, async (req, res) => {
 
     const getAllUser = await pool.query('SELECT * FROM users')
 
@@ -198,7 +199,7 @@ app.get('/user_list', async (req, res) => {
     });
 })
 // update user 
-app.get('/user/update_user/:user_id', async (req, res) => {
+app.get('/user/update_user/:user_id', checkNotAuthenticated, async (req, res) => {
     try {
         const params_user_id = req.params.user_id
         const { rows: get_user_detail } = await pool.query(`SELECT * FROM users WHERE user_id = '${params_user_id}'`)
@@ -215,7 +216,7 @@ app.get('/user/update_user/:user_id', async (req, res) => {
     }
 })
 // process update user
-app.post('/update/user', async (req, res) => {
+app.post('/update/user', checkNotAuthenticated, async (req, res) => {
     try {
         let { user_id, fullname, username, email, password, role } = req.body
         const { new_user_image, old_user_image } = req.file.path.replace(/\\/g, '/')
@@ -233,7 +234,7 @@ app.post('/update/user', async (req, res) => {
     }
 })
 // process delete user
-app.get('/user/delete_user/:user_id', async (req, res) => {
+app.get('/user/delete_user/:user_id', checkNotAuthenticated, async (req, res) => {
     try {
         // cek nama jika ada
         const checkUserId = await pool.query(`SELECT user_id FROM users WHERE user_id = '${req.params.user_id}'`)
@@ -251,10 +252,14 @@ app.get('/user/delete_user/:user_id', async (req, res) => {
 
 
 // render index page
-app.get('/index', checkAuthenticated, async (req, res) => {
-    try {
-        const getAllProduct = await pool.query('SELECT * FROM products')
-        res.render('index', {
+app.get('/index', checkNotAuthenticated, async (req, res) => {
+    const checkRole = req.user.role
+    // console.log(checkRole)
+
+    if(checkRole == 'admin'){
+        try {
+            const getAllProduct = await pool.query('SELECT * FROM products')
+            res.render('index', {
             title: 'Dashboard page',
             layout: './layouts/main_layouts',
             products: getAllProduct.rows,
@@ -264,11 +269,14 @@ app.get('/index', checkAuthenticated, async (req, res) => {
     } catch (error) {
         console.log(error.message)
     }
+    } else {
+        res.redirect('/login')
+    }
 })
 
 
 // render product list page
-app.get('/product_list', async (req, res) => {
+app.get('/product_list', checkNotAuthenticated, async (req, res) => {
     try {
         const getAllProduct = await pool.query('SELECT * FROM products')
         res.render('product_list', {
@@ -283,7 +291,7 @@ app.get('/product_list', async (req, res) => {
 
 
 // render add product page
-app.get('/add_product', (req, res) => {
+app.get('/add_product', checkNotAuthenticated, (req, res) => {
 
     res.render('add_product', {
         title: 'add product',
@@ -291,13 +299,13 @@ app.get('/add_product', (req, res) => {
     });
 })
 // process add product
-app.post('/product/addproduct', upload.single('product_image'), async (req, res) => {
+app.post('/product/addproduct', checkNotAuthenticated, upload.single('product_image'), async (req, res) => {
     try {
         // res.send('image uploaded')
-        const { productName, price, description } = req.body
+        const { productName, description, price } = req.body
         const product_image = req.file.path.replace(/\\/g, '/')
-        console.log(product_image)
-        await pool.query(`INSERT INTO products (product_name, price, description, product_image) VALUES ('${productName}', '${price}', '${description}', '${product_image}') RETURNING *`)
+        // console.log(product_image)
+        await pool.query(`INSERT INTO products (product_name, description, product_image, price) VALUES ('${productName}', '${description}', '${product_image}', '${price}') RETURNING *`)
         req.flash('success_message', 'new data has been added')
         res.redirect('/product_list')
     } catch (error) {
@@ -307,7 +315,7 @@ app.post('/product/addproduct', upload.single('product_image'), async (req, res)
 
 
 // render detail product page
-app.get('/product/detail_product/:product_id', async (req, res) => {
+app.get('/product/detail_product/:product_id', checkNotAuthenticated, async (req, res) => {
     try {
         const params_product_id = req.params.product_id
         const { rows: get_product_detail } = await pool.query(`SELECT * FROM products WHERE product_id = '${params_product_id}'`)
@@ -327,7 +335,7 @@ app.get('/product/detail_product/:product_id', async (req, res) => {
 
 
 // update product
-app.get('/product/update_product/:product_id', async (req, res) => {
+app.get('/product/update_product/:product_id', checkNotAuthenticated, async (req, res) => {
     try {
         const params_product_id = req.params.product_id
         const { rows: get_product_detail } = await pool.query(`SELECT * FROM products WHERE product_id = '${params_product_id}'`)
@@ -344,7 +352,7 @@ app.get('/product/update_product/:product_id', async (req, res) => {
     }
 })
 // update product process
-app.post('/product/update_product', async (req, res) => {
+app.post('/product/update_product', checkNotAuthenticated, async (req, res) => {
     try {
         let { product_id, product_name, price, description } = req.body
         const { new_product_image, old_product_image } = req.file.path.replace(/\\/g, '/')
@@ -361,7 +369,7 @@ app.post('/product/update_product', async (req, res) => {
     }
 })
 // process delete product
-app.get('/product/delete_product/:product_id', async (req, res) => {
+app.get('/product/delete_product/:product_id', checkNotAuthenticated, async (req, res) => {
     try {
         // cek nama jika ada
         const checkProductId = await pool.query(`SELECT product_id FROM products WHERE product_id = '${req.params.product_id}'`)
@@ -378,7 +386,7 @@ app.get('/product/delete_product/:product_id', async (req, res) => {
 
 
 // render selling list page
-app.get('/selling_list', async (req, res) => {
+app.get('/selling_list', checkNotAuthenticated, async (req, res) => {
 
     const { rows: selling_list_result } = await pool.query(
         `SELECT
@@ -391,7 +399,7 @@ app.get('/selling_list', async (req, res) => {
             ON se.user_id = us.user_id `
     )
 
-    console.log(selling_list_result)
+    // console.log(selling_list_result)
 
     selling_list_result.map(selling_list => {
         res.render('selling_list', {
@@ -405,20 +413,24 @@ app.get('/selling_list', async (req, res) => {
 
 })
 
-app.get('/selling_list/:product_id', async (req, res) => {
-
-    const params_product_id = req.params.product_id
-    const params_user_id = req.user.user_id
-
-    // get current date data
-    var timestamp = new Date();
-    var dd = String(timestamp.getDate()).padStart(2, '0');
-    var mm = String(timestamp.getMonth() + 1).padStart(2, '0'); //January is 0!
-    var yyyy = timestamp.getFullYear();
-    timestamp = mm + '/' + dd + '/' + yyyy;
-
-    await pool.query(`INSERT INTO selling (product_id, user_id, date) VALUES ('${params_product_id}', '${params_user_id}', '${timestamp}') RETURNING *`)
-    res.redirect('/selling_list')
+app.get('/selling_list/:product_id', checkNotAuthenticated, async (req, res) => {
+    
+    try {
+        const params_product_id = req.params.product_id
+        const params_user_id = req.user.user_id
+    
+        // get current date data
+        var timestamp = new Date();
+        var dd = String(timestamp.getDate()).padStart(2, '0');
+        var mm = String(timestamp.getMonth() + 1).padStart(2, '0'); //January is 0!
+        var yyyy = timestamp.getFullYear();
+        timestamp = mm + '/' + dd + '/' + yyyy;
+    
+        await pool.query(`INSERT INTO selling (product_id, user_id, date) VALUES ('${params_product_id}', '${params_user_id}', '${timestamp}') RETURNING *`)
+        res.redirect('/selling_list')
+    } catch (error) {
+        console.error(error.message)
+    }
 
 })
 
