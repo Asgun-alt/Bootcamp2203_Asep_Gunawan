@@ -1,0 +1,20 @@
+The advantages :
+Declarative views : more predictable and debugable codes
+Component-based : able to build encapsulated Component
+Learn once, write anywhere : develop new features without rewriting providing
+
+Why ReactJS
+# simple
+# easy to Learn
+# One-way data binding
+# performances
+# Testability (easy to test)
+
+ReactJS Featires
+# JSX (Javascript XML)
+# VDOM (Virtual Document Object Model)
+# Single Way Data Flow
+# React Native
+
+// installing react
+create-react-app my_first_app
