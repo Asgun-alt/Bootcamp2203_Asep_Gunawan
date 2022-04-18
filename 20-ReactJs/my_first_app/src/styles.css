@@ -1,0 +1,15 @@
+.nav-bar {
+    display: flex;
+}
+
+.nav-items{
+    display: block;
+    overflow: hidden;
+    padding-left: 40%;
+}
+
+li {
+    float: left;
+    padding-left: 1rem;
+    list-style-type: none;
+}
