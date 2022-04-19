@@ -11,7 +11,7 @@ function initialize(passport) {
                 if (error) {
                     console.error(error.message)
                 }
-                console.log(results.rows)
+                // console.log(results.rows)
 
                 if (results.rows.length > 0) {
                     // passing the user object to the result

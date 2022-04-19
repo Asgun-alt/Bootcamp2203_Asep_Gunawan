@@ -1,5 +1,26 @@
 <div class="pt-3 pb-3">
 
+    <div class="container-fluid">
+        <% if ( success_message.length !==0) { %>
+            <div class="container-sm col-md-5">
+                <div class="alert alert-success" role="alert">
+                    <div class="alert-message">
+                        <%= success_message %>
+                    </div>
+                </div>
+            </div>
+            <% } %>
+                <% if ( failed_message.length !==0) { %>
+                    <div class="container-sm col-md-5">
+                        <div class="alert alert-danger" role="alert">
+                            <div class="alert-message">
+                                <%= failed_message %>
+                            </div>
+                        </div>
+                    </div>
+                    <% } %>
+    </div>
+
     <div class="container">
         <% if (getUsers.length < 1) { %>
             <p>product is empty</p>

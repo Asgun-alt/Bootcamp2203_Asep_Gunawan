@@ -7,7 +7,7 @@ const bcrypt = require('bcrypt')
 const passport = require('passport')
 const multer = require('multer')
 const fs = require('fs')
-const path = require('path')
+const Path = require('path')
 
 // initialize database and get functions
 // const pool = require('./db')
@@ -31,7 +31,7 @@ initializePassport(passport)
 const fileImageStorage = multer.diskStorage({
     destination: (req, file, callback) => {
         // the first argument is any erros that occurs, pass null
-        callback(null, 'public/product-images')
+        callback(null, 'public/product_images')
     },
     // differentiate each files name so it'll be unique 
     filename: (req, file, callback) => {
@@ -44,11 +44,11 @@ const upload = multer({ storage: fileImageStorage })
 const fileUserImageStorage = multer.diskStorage({
     destination: (req, file, callback) => {
         // the first argument is any erros that occurs, pass null
-        callback(null, 'public/user-images')
+        callback(null, 'public/user_images')
     },
     // differentiate each files name so it'll be unique 
     filename: (req, file, callback) => {
-        callback(null, Date.now() + '-' + file.originalname)
+        callback(null, Date.now() + '_' + file.originalname)
     }
 })
 const upload_user_image = multer({ storage: fileUserImageStorage })
@@ -65,7 +65,6 @@ app.use(expressLayouts);
 // configure flash message
 app.use(cookieParser('secret'))
 app.use(session({
-    cookie: { maxAge: 1000000 },
     store: sessionStore,
     saveUninitialized: true,
     resave: 'false',
@@ -86,19 +85,20 @@ app.use(passport.initialize())
 app.use(passport.session())
 
 // middleware logger with morgan
-var logStream = fs.createWriteStream(path.join(__dirname, 'access_log.log'), { flags: 'a' })
+var logStream = fs.createWriteStream(Path.join(__dirname, 'access_log.log'), { flags: 'a' })
 app.use(morgan(':method :url :status :remote-user :date', { stream: logStream }))
 
 
 // render login page
-app.get('/', (req, res) => {
+app.get('/', checkAuthenticated, (req, res) => {
     res.render('login', {
         title: 'login',
         layout: './layouts/login_layouts',
+        success_message: req.flash('success_message')
     })
 })
 app.post("/login/user", passport.authenticate('local', {
-    successRedirect: '/index',
+    successRedirect: '/product_list',
     failureRedirect: '/',
     failureFlash: true
 }))
@@ -115,6 +115,8 @@ app.get('/register', checkNotAuthenticated,  (req, res) => {
 
     res.render('register', {
         layout: './layouts/main_layouts',
+        success_message: req.flash('success_message'),
+        failed_message: req.flash('fail_message')
     });
 })
 
@@ -128,17 +130,17 @@ app.post('/register/new_user', checkNotAuthenticated, upload_user_image.single('
 
         // form validation
         if (!fullname || !username || !email || !password || !confirm_password || !role) {
-            errors.push({ message: 'fields must not empty' })
+            req.flash('failed_message', 'Fields must not be empty')
         }
 
         if (password.length < 8) {
-            errors.push({ message: 'password must be at least 8 characters' })
+            req.flash('failed_message', 'Password must be at least 8 characters')
         }
         if (password !== confirm_password) {
-            errors.push({ message: 'password do not match' })
+            req.flash('failed_message', 'Password do not match')
         }
 
-        console.log({ fullname, username, email, password, confirm_password, role, user_image })
+        // console.log({ fullname, username, email, password, confirm_password, role, user_image })
 
         if (errors.length > 0) {
             res.render('register', {
@@ -156,10 +158,10 @@ app.post('/register/new_user', checkNotAuthenticated, upload_user_image.single('
                 if (error) {
                     console.error(error.message)
                 }
-                console.log(results.rows)
+                // console.log(results.rows)
 
                 if (results.rows.length > 0) {
-                    errors.push({ message: 'Email already registered!' })
+                    req.flash('failed_message', 'Email already registered')
                     res.render('register', { errors })
                 } else {
                     // there is no duplicate
@@ -171,8 +173,8 @@ app.post('/register/new_user', checkNotAuthenticated, upload_user_image.single('
                         if (error) {
                             console.error(error.message)
                         }
-                        console.log(results.rows)
-                        req.flash('message', 'You are now registered')
+                        // console.log(results.rows)
+                        req.flash('success_message', 'You are now registered')
                         res.redirect('/')
 
                     }
@@ -195,7 +197,9 @@ app.get('/user_list', checkNotAuthenticated, async (req, res) => {
     res.render('user_list', {
         title: 'user list page',
         layout: './layouts/main_layouts',
-        getUsers: getAllUser.rows
+        getUsers: getAllUser.rows,
+        success_message: req.flash('success_message'),
+        failed_message: req.flash('fail_message')
     });
 })
 // update user 
@@ -218,17 +222,23 @@ app.get('/user/update_user/:user_id', checkNotAuthenticated, async (req, res) =>
 // process update user
 app.post('/update/user', checkNotAuthenticated, async (req, res) => {
     try {
-        let { user_id, fullname, username, email, password, role } = req.body
-        const { new_user_image, old_user_image } = req.file.path.replace(/\\/g, '/')
-        let hashedPassword = await bcrypt.hash(password, 10)
-
-        if (new_user_image === '') {
-            await pool.query(`UPDATE users SET fullname = '${fullname}', username = '${username}', email = '${email}', password = '${hashedPassword},role = '${role}', user_image = '${old_user_image}' WHERE product_id = '${user_id}' `)
+        let { user_id, fullname, username, email, password, oldPassword, role, old_user_image } = req.body
+        // console.log(password)
+        // console.log(hashedPassword)
+        
+        if (!req.file && password === undefined) {
+            // await pool.query(`UPDATE users SET fullname = '${fullname}', username = '${username}', email = '${email}', password = '${oldPassword},role = '${role}', user_image = '${old_user_image}' WHERE product_id = '${user_id}' `)
+            req.flash('success_message', 'User has been updated')
+            res.redirect('/user_list')
         } else {
-            await pool.query(`UPDATE users SET fullname = '${fullname}', username = '${username}', email = '${email}', password = '${hashedPassword},role = '${role}', user_image = '${new_user_image}' WHERE product_id = '${user_id}' `)
+            let saltPassword = await bcrypt.genSalt(10)
+            let hashedPassword = await bcrypt.hash(password, saltPassword)
+            const { new_user_image } = req.file.path.replace(/\\/g, '/')
+            // await pool.query(`UPDATE users SET fullname = '${fullname}', username = '${username}', email = '${email}', password = '${hashedPassword},role = '${role}', user_image = '${new_user_image}' WHERE product_id = '${user_id}' `)
+            req.flash('success_message', 'User has been updated')
+            res.redirect('/user_list')
         }
 
-        res.redirect('/user_list')
     } catch (error) {
         console.error(error.message)
     }
@@ -242,6 +252,7 @@ app.get('/user/delete_user/:user_id', checkNotAuthenticated, async (req, res) =>
             res.redirect('/user_list')
         } else {
             await pool.query(`DELETE FROM users WHERE user_id = '${req.params.user_id}'`)
+            req.flash('success_message', 'User has been deleted')
             res.redirect('/user_list')
         }
     } catch (error) {
@@ -264,13 +275,13 @@ app.get('/index', checkNotAuthenticated, async (req, res) => {
             layout: './layouts/main_layouts',
             products: getAllProduct.rows,
             success_message: req.flash('success_message'),
-            fail_message: req.flash('fail_message')
+            failed_message: req.flash('fail_message')
         });
     } catch (error) {
         console.log(error.message)
     }
     } else {
-        res.redirect('/login')
+        res.redirect('/')
     }
 })
 
@@ -306,8 +317,8 @@ app.post('/product/addproduct', checkNotAuthenticated, upload.single('product_im
         const product_image = req.file.path.replace(/\\/g, '/')
         // console.log(product_image)
         await pool.query(`INSERT INTO products (product_name, description, product_image, price) VALUES ('${productName}', '${description}', '${product_image}', '${price}') RETURNING *`)
-        req.flash('success_message', 'new data has been added')
-        res.redirect('/product_list')
+        req.flash('success_message', 'New product has been added')
+        res.redirect('/index')
     } catch (error) {
         console.error(error.message)
     }
@@ -335,7 +346,7 @@ app.get('/product/detail_product/:product_id', checkNotAuthenticated, async (req
 
 
 // update product
-app.get('/product/update_product/:product_id', checkNotAuthenticated, async (req, res) => {
+app.get('/product/update_product/:product_id', checkNotAuthenticated, upload.single('product_image'), async (req, res) => {
     try {
         const params_product_id = req.params.product_id
         const { rows: get_product_detail } = await pool.query(`SELECT * FROM products WHERE product_id = '${params_product_id}'`)
@@ -352,18 +363,21 @@ app.get('/product/update_product/:product_id', checkNotAuthenticated, async (req
     }
 })
 // update product process
-app.post('/product/update_product', checkNotAuthenticated, async (req, res) => {
+app.post('/product/update_product', checkNotAuthenticated, upload.single('new_product_image'), async (req, res) => {
     try {
-        let { product_id, product_name, price, description } = req.body
-        const { new_product_image, old_product_image } = req.file.path.replace(/\\/g, '/')
-
-        if (new_product_image === '') {
+        let { product_id, product_name, price, description, old_product_image } = req.body
+        
+        if (!req.file) {
             await pool.query(`UPDATE products SET product_name = '${product_name}', price = '${price}', description = '${description}', product_image = '${old_product_image}' WHERE product_id = '${product_id}' `)
+            req.flash('success_message', 'Product has beens updated')
+            res.redirect('/index')
         } else {
+            const new_product_image = req.file.path.replace(/\\/g, '/')
             await pool.query(`UPDATE products SET product_name = '${product_name}', price = '${price}', description = '${description}', product_image = '${new_product_image}' WHERE product_id = '${product_id}' `)
+            req.flash('success_message', 'Product has been updated')
+            res.redirect('/index')
         }
 
-        res.redirect('/product_list')
     } catch (error) {
         console.error(error.message)
     }
@@ -376,6 +390,7 @@ app.get('/product/delete_product/:product_id', checkNotAuthenticated, async (req
         if (checkProductId.rowCount == 0) {
             res.redirect('/index')
         } else {
+            req.flash('failed_message', 'Fail to delete product')
             await pool.query(`DELETE FROM products WHERE product_id = '${req.params.product_id}'`)
             res.redirect('/index')
         }
@@ -401,15 +416,13 @@ app.get('/selling_list', checkNotAuthenticated, async (req, res) => {
 
     // console.log(selling_list_result)
 
-    selling_list_result.map(selling_list => {
-        res.render('selling_list', {
-            title: 'selling list page',
-            layout: './layouts/main_layouts',
-            selling_list_result,
-            selling_list
-        })
-    }
-    )
+    res.render('selling_list', {
+        title: 'selling list',
+        layout: './layouts/main_layouts',
+        selling: selling_list_result,
+        success_message: req.flash('success_message'),
+        failed_message: req.flash('fail_message')
+    });
 
 })
 
@@ -425,20 +438,14 @@ app.get('/selling_list/:product_id', checkNotAuthenticated, async (req, res) => 
         var mm = String(timestamp.getMonth() + 1).padStart(2, '0'); //January is 0!
         var yyyy = timestamp.getFullYear();
         timestamp = mm + '/' + dd + '/' + yyyy;
-    
+
         await pool.query(`INSERT INTO selling (product_id, user_id, date) VALUES ('${params_product_id}', '${params_user_id}', '${timestamp}') RETURNING *`)
+        req.flash('success_message', 'New Product has been added')
         res.redirect('/selling_list')
     } catch (error) {
         console.error(error.message)
     }
 
-})
-
-
-app.use('/', (req, res) => {
-    // set status code to 404
-    res.status(404)
-    res.send('Error 404: Page not found')
 })
 
 function checkAuthenticated(req, res, next) {
@@ -453,8 +460,15 @@ function checkNotAuthenticated(req, res, next) {
         return next();
     }
     res.redirect("/");
-}
+    
 
+app.use('/', (req, res) => {
+    // set status code to 404
+    res.status(404)
+    res.send('Error 404: Page not found')
+})
+
+}
 
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)

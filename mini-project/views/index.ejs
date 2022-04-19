@@ -1,26 +1,25 @@
 <div class="body-container">
     <div class="pt-5">
+        
         <div class="container-fluid">
-            <div class="display-3 text-center text-uppercase">
-                <% if ( success_message.length !==0) { %>
-                    <div class="container-sm col-md-5">
-                        <div class="alert alert-success" role="alert">
-                            <div class="alert-message">
-                                <%= success_message %>
-                            </div>
+            <% if ( success_message.length !==0) { %>
+                <div class="container-sm col-md-5">
+                    <div class="alert alert-success" role="alert">
+                        <div class="alert-message">
+                            <%= success_message %>
                         </div>
                     </div>
-                    <% } %>
-                        <% if ( fail_message.length !==0) { %>
-                            <div class="container-sm col-md-5">
-                                <div class="alert alert-danger" role="alert">
-                                    <div class="alert-message">
-                                        <%= fail_message %>
-                                    </div>
+                </div>
+                <% } %>
+                    <% if ( failed_message.length !==0) { %>
+                        <div class="container-sm col-md-5">
+                            <div class="alert alert-danger" role="alert">
+                                <div class="alert-message">
+                                    <%= failed_message %>
                                 </div>
                             </div>
-                            <% } %>
-            </div>
+                        </div>
+                        <% } %>
         </div>
 
         <div class="table-container table-responsive">

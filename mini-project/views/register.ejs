@@ -2,17 +2,24 @@
     <div class="pt-3 pb-3">
 
         <div class="container-fluid">
-            <% if (typeof errors !='undefined' ) { %>
-                <div class="alert alert-danger" role="alert">
-                    <ul>
-                        <% errors.forEach(error=> { %>
-                            <li>
-                                <%= error.message %>
-                            </li>
-                            <% }) %>
-                    </ul>
+            <% if ( success_message.length !==0) { %>
+                <div class="container-sm col-md-5">
+                    <div class="alert alert-success" role="alert">
+                        <div class="alert-message">
+                            <%= success_message %>
+                        </div>
+                    </div>
                 </div>
                 <% } %>
+                    <% if ( failed_message.length !==0) { %>
+                        <div class="container-sm col-md-5">
+                            <div class="alert alert-danger" role="alert">
+                                <div class="alert-message">
+                                    <%= failed_message %>
+                                </div>
+                            </div>
+                        </div>
+                        <% } %>
         </div>
 
         <div class="container-sm col-md-5 form-container">

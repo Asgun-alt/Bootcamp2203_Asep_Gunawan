@@ -2,9 +2,8 @@
     <%= title %>
 </div>
 
-<form method="post" action="/product/update_product">
+<form method="post" action="/product/update_product" enctype="multipart/form-data" >
     <div class="container-sm col-md-5 form-container">
-        <form method="post" action="/product/addproduct" enctype="multipart/form-data">
             <input type="hidden" name="product_id" id="product_id" value="<%= product_detail.product_id %>">
             <div class="mb-3">
                 <label for="product_name" class="form-label">Product Name :</label>
