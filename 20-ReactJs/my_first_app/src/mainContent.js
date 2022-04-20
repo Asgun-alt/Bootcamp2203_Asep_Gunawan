@@ -1,4 +1,5 @@
 import React  from 'react';
+import Items from './items'
 
 const mainContent = () => {
 
@@ -6,7 +7,8 @@ const mainContent = () => {
         <React.Fragment>
             <h1>This is React</h1>
             <p>WGS Bootcamp ReactJS</p>
-            </React.Fragment>
+        <Items></Items>
+        </React.Fragment>
     );
 
 };

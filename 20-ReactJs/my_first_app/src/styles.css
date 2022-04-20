@@ -13,3 +13,7 @@ li {
     padding-left: 1rem;
     list-style-type: none;
 }
+
+button{
+    margin: 0 1rem;
+}

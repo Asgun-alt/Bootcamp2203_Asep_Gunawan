@@ -11,4 +11,3 @@ function renderDOM(content, id) {
 
 renderDOM(<Nav />, ("nav"))
 renderDOM(<MainContent />,("root"))
-renderDOM(<Items />,("Items"))
