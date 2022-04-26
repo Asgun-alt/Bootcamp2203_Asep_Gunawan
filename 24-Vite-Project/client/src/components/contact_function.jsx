@@ -46,7 +46,7 @@ export default function contactFunction () {
         try {
             const getDeleteContact = await fetch(`http://localhost:3001/contact/delete/${id}`, {
                 method: 'DELETE'
-            })
+            });handleGetContacts();
 
             setGetContacts(contacts.filter(contact => contact.id !== id))
             // window.location = "/contacts"

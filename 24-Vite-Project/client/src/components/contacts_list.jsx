@@ -4,7 +4,7 @@ import UpdateContact from "./contact_update";
 import DetailContact from "./contact_detail"
 
 
-export default function Contacts({handleGetContacts, handleContactDetail, handleContactDelete}) {
+export default function Contacts({handleGetContacts, handleContactDelete}) {
 
         return (
             <Fragment>
@@ -20,9 +20,9 @@ export default function Contacts({handleGetContacts, handleContactDetail, handle
                             </tr>
                         </thead>
                         <tbody>
-                        {handleGetContacts?.map(contact => (
+                        {handleGetContacts.map((contact, index) => (
                         <tr key={contact.id}>
-                            <td>{contact.id}</td>
+                            <td>{index+1}</td>
                             <td>{contact.name}</td>
                             <td>{contact.email}</td>
                             <td>
