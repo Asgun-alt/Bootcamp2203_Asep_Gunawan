@@ -1,15 +1,17 @@
 import React, { Fragment } from "react";
 import {Table, Button} from 'react-bootstrap'
-import UpdateContact from "./contact_update";
+import UpdateContact from "./contact_update"
 import DetailContact from "./contact_detail"
+import CreateContact from './contact_create'
+import HandleDeleteContact from './contact_delete'
 
 
-export default function Contacts({handleGetContacts, handleContactDelete}) {
+export default function Contacts({handleGetContacts}) {
 
         return (
             <Fragment>
-
                 <div>
+                    <CreateContact />
                     <Table responsive='sm' bg='light'>
                         <thead>
                             <tr>
@@ -28,7 +30,7 @@ export default function Contacts({handleGetContacts, handleContactDelete}) {
                             <td>
                             <DetailContact contact={contact}/>{' '}
                             <UpdateContact contact={contact} />{' '}
-                            <Button variant="danger" onClick={() => handleContactDelete(contact.id)}>Delete</Button>
+                            <HandleDeleteContact contact={contact} />{' '}
                             </td>
                         </tr>
                         ))}
